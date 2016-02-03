@@ -99,57 +99,42 @@ int calculeTempCel(Matrice *matrice1, Matrice *matrice2, int i, int y){
 /////////// Si la Cel est sur l'un des "coins" de la grille. //////////////////
 
 	else if(c->bordHaut && c->bordDroite){
-		//printf("choix 1\n");
 		c->temp = ((m[i+1][y].temp + m[i][y-1].temp)*coofVHNume + m[i+1][y-1].temp)/coofDeno;
 	}
 	else if(c->bordHaut && c->bordGauche){
-		//printf("choix 2\n");
 		c->temp =  ((m[i+1][y].temp + m[i][y+1].temp)*coofVHNume + m[i+1][y+1].temp)/coofDeno;
 
 	}
 	else if(c->bordBas && c->bordDroite){
-		//printf("choix 3\n");
-
-		//printf("bas = %d et droite = %d\n",c->bordBas,c->bordDroite );
-
 		c->temp =  ((m[i-1][y].temp + m[i][y-1].temp)*coofVHNume + m[i-1][y-1].temp)/coofDeno;
 
 
 	}
 	else if(c->bordBas && c->bordGauche){
-		//printf("choix 4\n");
 		c->temp = ((m[i-1][y].temp + m[i][y+1].temp)*coofVHNume + m[i-1][y+1].temp)/coofDeno;
 	}
 
 /////////// Si la Cel est sur l'un des "bords" de la grille. //////////////////
 
 	else if(c->bordHaut){
-		//printf("choix 5\n");
 		c->temp = ((m[i+1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofVHNume + m[i+1][y-1].temp + m[i+1][y+1].temp)/coofDeno;
 	}
 
 	else if(c->bordBas){
-		//printf("choix 6\n");
 		c->temp = ((m[i-1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofVHNume + m[i-1][y-1].temp + m[i-1][y+1].temp)/coofDeno;
 	}
 
 	else if(c->bordDroite){
-		//printf("choix 7\n");
 		c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y+1].temp)*coofVHNume + m[i+1][y+1].temp + m[i-1][y+1].temp)/coofDeno;
 	}
 
 	else if(c->bordGauche){
-		//printf("choix 8\n");
 		c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y-1].temp)*coofVHNume + m[i-1][y-1].temp + m[i+1][y-1].temp)/coofDeno;
 	}
 
 ////////// Cas general /////////////
 
 	else{
-		//printf("choix 9\n");
-
-
-
 		c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofVHNume + m[i-1][y-1].temp + m[i+1][y-1].temp + m[i+1][y+1].temp + m[i-1][y+1].temp)/coofDeno;
 	}
 
