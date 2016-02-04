@@ -1,10 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "Matrice.h"
 
-int indice_N = 4;
-int nbInteration = 10000;
+int indices_N[20];
+int tailleIndices = 0;
+int nbIteration = 10000;
+bool affichageTemperature = false;
+bool affichageTemps = false;
+unsigned int etapes = 0;
+int threads[20];
+int tailleThreads = 0;
+
+enum Etapes {
+  ITERATIF = 1,
+  THREAD_BAR = 2,
+  THREAD_BAR_COND = 4,
+  THREAD_BAR_SEMAPHORE = 8,
+  OPENCL_CPU = 16,
+  OPENCL_GPU = 32
+};
 
 
 /// git commit -m -a "sddcfzeefzeer"
@@ -19,7 +35,113 @@ int nbInteration = 10000;
 // 	}
 // }
 
-void main(void){
+void main(int argc, char *argv[]){
+	if (argc > 1) {
+	for (int i = 1; argv[i]; i++)
+	{
+		char *mot = argv[i];
+		if (mot[0] == '-') 
+		{
+			if (mot[1] == 's')
+			{
+				i++;
+				if (i <= argc && argv[i])
+				{
+					char c;
+					while((c = *argv[i]) != '\0')
+				    {
+				    	if (c >= '0' && c <= '9')
+				    	{
+				    		indices_N[tailleIndices] = c - '0';
+				    		tailleIndices++;
+				    	}
+					     argv[i]++;
+				   }
+				}
+			}
+			else if (mot[1] == 'm')
+			{
+				affichageTemps = true;
+			}
+			else if (mot[1] == 'a')
+			{
+				affichageTemperature = true;
+			}
+			else if (mot[1] == 'i')
+			{
+				i++;
+				if (i <= argc && argv[i])
+				{
+					int nb = atoi(argv[i]);
+					if (nb == 0)
+						printf("Le nombre d'itérations n'est pas valide\n");
+					else
+						nbIteration = nb;
+				}
+			}
+			else if (mot[1] == 'e')
+			{
+				i++;
+				if (i <= argc && argv[i])
+				{
+					char c;
+					while((c = *argv[i]) != '\0')
+				    {
+					    switch(c) {
+					      case '0':
+					        etapes |= ITERATIF; break;
+					      case '1':
+					        etapes |= THREAD_BAR; break;
+					      case '2':
+					        etapes |= THREAD_BAR_COND; break;
+					      case '3':
+					        etapes |= THREAD_BAR_SEMAPHORE; break;
+					      case '4':
+					        etapes |= OPENCL_CPU; break;
+					      case '5':
+					      	etapes |= OPENCL_GPU; break;
+					      default:
+					        printf("Etape inconnue : %c\n", c);
+					     }
+					     argv[i]++;
+				   }
+			}
+		}
+		else if (mot[1] == 't')
+		{
+			i++;
+				if (i <= argc && argv[i])
+				{
+					char c;
+					while((c = *argv[i]) != '\0')
+				    {
+				    	if (c >= '0' && c <= '5')
+				    	{
+				    		threads[tailleThreads] = c - '0';
+				    		tailleThreads++;
+				    	}
+				    	else
+				    	{
+				    		printf("Nombre de threads invalide, saisi %d alors qu'il doit etre compris entre 0 et 5\n", c - '0');
+				    	}
+				    	argv[i]++;
+				   }
+				}
+			}
+			else break;
+				
+		}
+	}	
+	}
+	// On définit des valeurs par défaut pour les tableaux
+	// 2**(4+4) = 256 plaque de taille 256*256
+	indices_N[0] = 4;
+	tailleIndices = 1;
+	
+	// 4*t donc 4*1 = 4 threads
+	threads[0] = 1;
+	tailleThreads = 1;
+
 
 	//int taille = 2<<indice_N;
 
