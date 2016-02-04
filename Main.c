@@ -23,55 +23,39 @@ void main(void){
 
 	//int taille = 2<<indice_N;
 
-	int taille = 10;
 
-	// float matriceT0[taille][taille];
 
-	// float matriceT1[taille][taille];
+	int puissance2 = 4;
 
-	// // parcourt()
-
-	// matriceT1[0][0] = 1.1;
 
 	Matrice matrice1;
 	Matrice matrice2;
 
-	new_Matrice(taille, &matrice1);
-	new_Matrice(taille, &matrice2);
+	new_Matrice(puissance2, &matrice1);
 
-	//m1.tab[0][0] = 3.3;
+	new_Matrice(puissance2, &matrice2);
 
+	delimitationZonneInterne(&matrice1, puissance2 , 36);
+	delimitationZonneExterne(&matrice1);
 
-	printf("coucou\n");
-
-	temperatureCentre(&matrice1, 36);
-
-
-	printf("%f\n",(float) matrice1.taille);
-
-	printf("%f\n",(float) matrice1.tab2[0][0].temp);
 
 	display(&matrice1);
 
-	// matrice1.tab2[-2][0].temp = 222;
 
-	// printf("\n\n");
-
-	// display(&matrice1);
 
 
 
 	int a = 0;
-	while(a < 10000){
+	while(a < 1000000){
 		a++;
 
 		parcourt(&matrice1,&matrice2);
 
-		display(&matrice2);
 
 		matrice1 = matrice2;
 
 	}
 
+	display(&matrice2);
 
 }

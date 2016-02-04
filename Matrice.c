@@ -1,3 +1,12 @@
+/*
+ * Matrice.c 
+ *
+ *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
+ *						Clément Sibut []
+ *    Date de creation: (Quentin)
+ * Dernier mise à jour: 4-02-1016 17:35:19 (Quentin)
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -6,142 +15,161 @@
 #include "Matrice.h"
 
 
-double coofVHNume = 4;
-double coofDeno = 36;
+float coofNume1 = 4;
+float coofNume2 = 16;
+float coofDeno = 36;
 
 
 
-int positionnement(Cel * c, int i, int y, int taille){
-	if(i == 0) c->bordHaut = 1;
-	if(i == taille-1) c->bordBas = 1;
-	if(y == 0) c->bordGauche = 1;
-	if(y == taille-1) c->bordDroite = 1;
 
-}
-
-
-int new_Matrice(int taille, Matrice *matrice){
+int new_Matrice(int puissance2, Matrice *matrice){
 
 	Matrice m = *matrice;
 
 	//taille de la matrice carre
-	m.taille = taille;
+
+	m.taillePuissance2 = puissance2;
+	m.taillePlaque = 2<<puissance2;
+	m.tailleGrille = m.taillePlaque + 2;
 
 
 
 	//allocation mémoire de la matrice
+	m.grille = (Cel**) malloc((m.tailleGrille)*sizeof(Cel));
 
-	m.tab2 = (Cel**) malloc(taille*sizeof(Cel));
 
 	//allocation mémoire de chaque ligne
-	for(int i = 0; i< taille; i++){
-
-		m.tab2[i] = (Cel*) malloc(taille*sizeof(Cel));
+	for(int i = 0; i< m.tailleGrille; i++){
+		m.grille[i] = (Cel*) malloc(m.tailleGrille*sizeof(Cel));
 	}
 
+
 		//allocation mémoire de chaque ligne
-	for(int i = 0; i< taille; i++){
-		for(int y = 0; y < taille ; y++){
-			//printf("i = %d et y = %d\n",i,y );
-
-			m.tab2[i][y].temp = 0;
-			m.tab2[i][y].tempConst = 0;
-
-			//printf("temp = %d\n\n",m.tab2[i][y].temp);
-
-			positionnement(&(m.tab2[i][y]), i, y , taille);
+	for(int i = 0; i < m.tailleGrille; i++){
+		for(int y = 0; y < m.tailleGrille ; y++){
+			m.grille[i][y].temp = 0;
 
 		}
-
-
-
 	}
 
 
 
 	*matrice = m;
 
-
-	// printf("tempssff = %d \n",m.tab2[0][0].temp);
-
-	// printf("tempAAA = %d \n",matrice->tab2[0][0].temp);
-
 	return 0;
 }
 
-int temperatureCentre(Matrice *m, double temp){
-	int taille = m->taille;
+// On delimite la zonne interne où les cellule ont une température constante TEMPS_CHAUD. On indique leur possition avec la variable zonneInterne;
+int delimitationZonneInterne(Matrice *m, int puissance2, float temp){
 
-	m->tab2[taille/2][taille/2].temp = temp;
-	// m->tab2[taille/2+1][taille/2].temp  = temp;
-	// m->tab2[taille/2][taille/2+1].temp  = temp;
-	// m->tab2[taille/2+1][taille/2+1].temp  = temp;
+	int indiceMin = (1<<(puissance2-1)) - (1<<(puissance2-4)) + 1;
+	int indiceMax = (1<<(puissance2-1)) + (1<<(puissance2-4)) + 1;
 
-	m->tab2[taille/2][taille/2].tempConst = 1;
-	// m->tab2[taille/2+1][taille/2].tempConst  = 1;
-	// m->tab2[taille/2][taille/2+1].tempConst  = 1;
-	// m->tab2[taille/2+1][taille/2+1].tempConst  = 1;
+
+	printf("%d\n", indiceMin);
+	printf("%d\n", indiceMax);
+
+	for(int i = indiceMin; i < indiceMax; i++){
+		for(int y = indiceMin; y < indiceMax; y++){
+			m->grille[i][y].temp = temp;
+			m->grille[i][y].zonneInterne = 1;
+		}
+	}
+
+	return 0;
 
 }
 
+int delimitationZonneExterne(Matrice *m){
+
+	for(int i = 0; i < m->tailleGrille; i++){
+		for(int y = 0; y < m->tailleGrille; y++){
+
+			if(i == m->tailleGrille - 1){
+ 				m->grille[i][y].zonneExterne = 1;
+ 				m->grille[i][y].bordBas = 1;
+			} 
+			else if(i == 0){
+ 				m->grille[i][y].zonneExterne = 1;
+ 				m->grille[i][y].bordHaut = 1;
+			}
+
+			if(y == m->tailleGrille - 1){
+ 				m->grille[i][y].zonneExterne = 1;
+ 				m->grille[i][y].bordDroite = 1;
+			}
+			else if(y == 0){
+ 				m->grille[i][y].zonneExterne = 1;				
+ 				m->grille[i][y].bordGauche = 1;
+			}
+
+		}
+	}
+
+	return 0;
+
+}
+
+
+//Permet de calculer la temperature d'une cellule à un temps donne t avec les temperature à t - 1.
 int calculeTempCel(Matrice *matrice1, Matrice *matrice2, int i, int y){
 
-	Cel ** m = matrice1->tab2;
+	// la matrice à t0
+	Cel ** m = matrice1->grille;
 
-	Cel * c = &(matrice2->tab2[i][y]);
 
-	if((matrice1->tab2[i][y]).tempConst){
+	// la cellure à modifier pour qu'elle soit en t1
+	Cel * c = &(matrice2->grille[i][y]);
 
-		c->temp = (matrice1->tab2[i][y]).temp;
+
+// Si la cellule ce trouve au centre de laa grille (en zonne interne) 
+// La température reste constante
+
+	if(m[i][y].zonneInterne){
+		c->temp = m[i][y].temp;
+		return 0;
 	}
 
+// Si la cellule ce trouve en bourdure de la grille (en zonne externe) 
+// On calcule ca température pour qu'elle soit égale a la cellule voisine qui est sur la plaque.
 
-/////////// Si la Cel est sur l'un des "coins" de la grille. //////////////////
-
-	else if(c->bordHaut && c->bordDroite){
-		c->temp = ((m[i+1][y].temp + m[i][y-1].temp)*coofVHNume + m[i+1][y-1].temp)/coofDeno;
-	}
-	else if(c->bordHaut && c->bordGauche){
-		c->temp =  ((m[i+1][y].temp + m[i][y+1].temp)*coofVHNume + m[i+1][y+1].temp)/coofDeno;
-
-	}
-	else if(c->bordBas && c->bordDroite){
-		c->temp =  ((m[i-1][y].temp + m[i][y-1].temp)*coofVHNume + m[i-1][y-1].temp)/coofDeno;
-
-
-	}
-	else if(c->bordBas && c->bordGauche){
-		c->temp = ((m[i-1][y].temp + m[i][y+1].temp)*coofVHNume + m[i-1][y+1].temp)/coofDeno;
-	}
-
-/////////// Si la Cel est sur l'un des "bords" de la grille. //////////////////
-
-	else if(c->bordHaut){
-		c->temp = ((m[i+1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofVHNume + m[i+1][y-1].temp + m[i+1][y+1].temp)/coofDeno;
-	}
-
-	else if(c->bordBas){
-		c->temp = ((m[i-1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofVHNume + m[i-1][y-1].temp + m[i-1][y+1].temp)/coofDeno;
-	}
-
-	else if(c->bordDroite){
-		c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y+1].temp)*coofVHNume + m[i+1][y+1].temp + m[i-1][y+1].temp)/coofDeno;
-	}
-
-	else if(c->bordGauche){
-		c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y-1].temp)*coofVHNume + m[i-1][y-1].temp + m[i+1][y-1].temp)/coofDeno;
+	if(m[i][y].zonneExterne){
+		if(m[i][y].bordHaut && m[i][y].bordGauche){
+			i++;
+			y++;
+		}
+		else if(m[i][y].bordHaut && m[i][y].bordDroite){
+			i++;
+			y--;
+		}
+		else if(m[i][y].bordBas && m[i][y].bordGauche){
+			i--;
+			y++;
+		}
+		else if(m[i][y].bordBas && m[i][y].bordDroite){
+			i--;
+			y--;
+		}
+		else if(m[i][y].bordHaut){
+			i++;
+		}
+		else if(m[i][y].bordDroite){
+			y--;
+		}
+		else if(m[i][y].bordGauche){
+			y++;
+		}
+		else if(m[i][y].bordBas){
+			i--;
+		}
 	}
 
-////////// Cas general /////////////
-
-	else{
-		c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofVHNume + m[i-1][y-1].temp + m[i+1][y-1].temp + m[i+1][y+1].temp + m[i-1][y+1].temp)/coofDeno;
-	}
+	// On calcule la temperature de la cellule pour un temps t donne avec les temperatures des 8 cellule voisine plus la sienne au temps t - 1. 
+	//On utilise pour l'instant de cooficients constant pour la diffusion.  
+	c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofNume1 + m[i][y].temp*coofNume2 + m[i-1][y-1].temp + m[i+1][y-1].temp + m[i+1][y+1].temp + m[i-1][y+1].temp )/coofDeno;
 
 
-	c->tempConst = (matrice1->tab2[i][y]).tempConst;
-
-
+	matrice2->grille = m;
 
 	return 0;
 
@@ -151,41 +179,45 @@ int parcourt(Matrice *matrice1, Matrice *matrice2){
 
 
 
-	Matrice m1 = *matrice1;
-	Matrice m2 = *matrice2;
-
-
-	int taille = matrice1->taille;
 
 
 
-	for(int i = 0; i < taille ; i++){
-		for(int y = 0; y < taille ; y++){
-			//printf("i = %d et y = %d\n",i,y );
 
-			calculeTempCel(&m1, &m2 , i, y);
+	int tailleGrille = matrice1->tailleGrille;
+
+
+
+	for(int i = 0; i < tailleGrille ; i++){
+		for(int y = 0; y < tailleGrille ; y++){
+			calculeTempCel(matrice1, matrice2 , i, y);
 		}
 	}
 
-	matrice1->tab2 = m1.tab2;
-	matrice2->tab2 = m2.tab2;
+
+
 
 	return 0;
 }
 
 
 
-
+// Permet d'afficher le quart haut-gauche de la plaque.  
 int display(Matrice *m){
 
-	printf("\n\n\nAffiche matrice : \n\n");
+	int indiceMinZonneInterne = (1<<(m->taillePuissance2-1)) - (1<<(m->taillePuissance2-4)) + 1;
+	int indiceMaxZonneInterne = (1<<(m->taillePuissance2-1)) + (1<<(m->taillePuissance2-4)) + 1;
 
-	int taille = m->taille;
+	int indicePsedoCentre = (indiceMaxZonneInterne + indiceMinZonneInterne)/2;
 
-	for(int i = 0; i < taille ; i++){
+
+	int taillePlaque = m->taillePlaque;
+
+	printf("\n\n\nAffiche plaque : \n\n");
+
+	for(int i = 1; i <= indicePsedoCentre ; i++){
 		printf("\n");
-		for(int y = 0; y < taille ; y++){
-			printf("%f - ", (double)(m->tab2[i][y]).temp); 
+		for(int y = 1; y <= indicePsedoCentre ; y++){
+			printf("%f - ", (float)(m->grille[i][y]).temp); 
 		}
 	}
 
