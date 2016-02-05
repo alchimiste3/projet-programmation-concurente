@@ -3,14 +3,14 @@
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
  *						Clément Sibut []
- *    Date de creation:  (Quentin)
+ *    Date de creation: 2-02-1016 11:00:00 (Quentin)
  * Dernier mise à jour: 4-02-1016 17:35:31 (Quentin)
  */
 
 
 // Structure qui permet de representation d'une cellule, 
-//c'est a dire un "morceau" de la plaque avec une temperature uniforme sur la surface de chacun d'elle.
-// C'est la combinaison de ces cellules qui permet la représentation de la diffussion de la chaleur
+// C'est a dire un "morceau" de la plaque avec une temperature uniforme sur la surface de chacun d'elle.
+// C'est la combinaison de ces cellules qui permet la représentation de la diffussion de la chaleur sur la plaque.
 typedef struct cel{
 	//Temperature de la cellule
 	float temp;

@@ -1,3 +1,12 @@
+/*
+ * Main.c 
+ *
+ *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
+ *						Clément Sibut []
+ *    Date de creation: 2-02-1016 11:00:00 (Quentin)
+ * Dernier mise à jour: 4-02-1016 17:35:19 (Quentin)
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -23,161 +32,147 @@ enum Etapes {
 };
 
 
-/// git commit -m -a "sddcfzeefzeer"
+/// git commit -ma "sddcfzeefzeer"
 
 
-
-// int parcourt(float ** m1, float ** m2, size_t taille){
-// 	for(int i = 0; i < taille ; i++){
-// 		for(int y = 0; y < taille ; y++){
-// 			m2[i][y]
-// 		}
-// 	}
-// }
-
+// Methode principale qui récupère les option de l'utilisateur et lance les différents scanarios demande.
 void main(int argc, char *argv[]){
 	if (argc > 1) {
-	for (int i = 1; argv[i]; i++)
-	{
-		char *mot = argv[i];
-		if (mot[0] == '-') 
+		for (int i = 1; argv[i]; i++)
 		{
-			if (mot[1] == 's')
+			char *mot = argv[i];
+			if (mot[0] == '-') 
 			{
-				i++;
-				if (i <= argc && argv[i])
+				if (mot[1] == 's')
 				{
-					char c;
-					while((c = *argv[i]) != '\0')
-				    {
-				    	if (c >= '0' && c <= '9')
-				    	{
-				    		indices_N[tailleIndices] = c - '0';
-				    		tailleIndices++;
-				    	}
-					     argv[i]++;
-				   }
+					i++;
+					if (i <= argc && argv[i])
+					{
+						char c;
+						while((c = *argv[i]) != '\0')
+					    {
+					    	if (c >= '0' && c <= '9')
+					    	{
+					    		indices_N[tailleIndices] = c - '0';
+					    		tailleIndices++;
+					    	}
+						     argv[i]++;
+					   }
+					}
+				}
+				else if (mot[1] == 'm')
+				{
+					affichageTemps = true;
+				}
+				else if (mot[1] == 'a')
+				{
+					affichageTemperature = true;
+				}
+				else if (mot[1] == 'i')
+				{
+					i++;
+					if (i <= argc && argv[i])
+					{
+						int nb = atoi(argv[i]);
+						if (nb == 0)
+							printf("Le nombre d'itérations n'est pas valide\n");
+						else
+							nbIteration = nb;
+					}
+				}
+				else if (mot[1] == 'e')
+				{
+					i++;
+					if (i <= argc && argv[i])
+					{
+						char c;
+						while((c = *argv[i]) != '\0')
+					    {
+						    switch(c) {
+						      case '0':
+						        etapes |= ITERATIF; break;
+						      case '1':
+						        etapes |= THREAD_BAR; break;
+						      case '2':
+						        etapes |= THREAD_BAR_COND; break;
+						      case '3':
+						        etapes |= THREAD_BAR_SEMAPHORE; break;
+						      case '4':
+						        etapes |= OPENCL_CPU; break;
+						      case '5':
+						      	etapes |= OPENCL_GPU; break;
+						      default:
+						        printf("Etape inconnue : %c\n", c);
+						     }
+						     argv[i]++;
+					   }
 				}
 			}
-			else if (mot[1] == 'm')
-			{
-				affichageTemps = true;
-			}
-			else if (mot[1] == 'a')
-			{
-				affichageTemperature = true;
-			}
-			else if (mot[1] == 'i')
+			else if (mot[1] == 't')
 			{
 				i++;
-				if (i <= argc && argv[i])
-				{
-					int nb = atoi(argv[i]);
-					if (nb == 0)
-						printf("Le nombre d'itérations n'est pas valide\n");
-					else
-						nbIteration = nb;
+					if (i <= argc && argv[i])
+					{
+						char c;
+						while((c = *argv[i]) != '\0')
+					    {
+					    	if (c >= '0' && c <= '5')
+					    	{
+					    		threads[tailleThreads] = c - '0';
+					    		tailleThreads++;
+					    	}
+					    	else
+					    	{
+					    		printf("Nombre de threads invalide, saisi %d alors qu'il doit etre compris entre 0 et 5\n", c - '0');
+					    	}
+					    	argv[i]++;
+					   }
+					}
 				}
+				else break;
+					
 			}
-			else if (mot[1] == 'e')
-			{
-				i++;
-				if (i <= argc && argv[i])
-				{
-					char c;
-					while((c = *argv[i]) != '\0')
-				    {
-					    switch(c) {
-					      case '0':
-					        etapes |= ITERATIF; break;
-					      case '1':
-					        etapes |= THREAD_BAR; break;
-					      case '2':
-					        etapes |= THREAD_BAR_COND; break;
-					      case '3':
-					        etapes |= THREAD_BAR_SEMAPHORE; break;
-					      case '4':
-					        etapes |= OPENCL_CPU; break;
-					      case '5':
-					      	etapes |= OPENCL_GPU; break;
-					      default:
-					        printf("Etape inconnue : %c\n", c);
-					     }
-					     argv[i]++;
-				   }
-			}
-		}
-		else if (mot[1] == 't')
-		{
-			i++;
-				if (i <= argc && argv[i])
-				{
-					char c;
-					while((c = *argv[i]) != '\0')
-				    {
-				    	if (c >= '0' && c <= '5')
-				    	{
-				    		threads[tailleThreads] = c - '0';
-				    		tailleThreads++;
-				    	}
-				    	else
-				    	{
-				    		printf("Nombre de threads invalide, saisi %d alors qu'il doit etre compris entre 0 et 5\n", c - '0');
-				    	}
-				    	argv[i]++;
-				   }
-				}
-			}
-			else break;
-				
-		}
-	}	
+		}	
 	}
-	// On définit des valeurs par défaut pour les tableaux
-	// 2**(4+4) = 256 plaque de taille 256*256
+
+
+// On définit des valeurs par défaut pour les tableaux
+// 2**(4+4) = 256 plaque de taille 256*256
 	indices_N[0] = 4;
 	tailleIndices = 1;
 	
-	// 4*t donc 4*1 = 4 threads
+// 4**t donc 4**1 = 4 threads
 	threads[0] = 1;
 	tailleThreads = 1;
 
 
-	//int taille = 2<<indice_N;
-
-
-
-	int puissance2 = 4;
-
-
+// Creation deux deus matrice pour représenter la plaque sur deux temps différents.
 	Matrice matrice1;
 	Matrice matrice2;
+	new_Matrice(indices_N[0], &matrice1);
+	new_Matrice(indices_N[0], &matrice2);
 
-	new_Matrice(puissance2, &matrice1);
-
-	new_Matrice(puissance2, &matrice2);
-
-	delimitationZonneInterne(&matrice1, puissance2 , 36);
+// Initialisation zonne Interne et Externe de la plaque
+	delimitationZonneInterne(&matrice1, indices_N[0] , 36);
 	delimitationZonneExterne(&matrice1);
+	delimitationZonneInterne(&matrice2, indices_N[0] , 36);
+	delimitationZonneExterne(&matrice2);
 
-
+//Affichage de la plaque à t = 1
 	display(&matrice1);
 
 
-
-
-
 	int a = 0;
-	while(a < 1000000){
+
+//Boucle d'intération pour simuler la diffusion de la chaleur sur plusieur itérations
+	while(a < nbIteration){
 		a++;
-
 		parcourt(&matrice1,&matrice2);
-
-
 		matrice1 = matrice2;
 
 	}
 
+//Affichage de la plaque à t = nbIteration
 	display(&matrice2);
 
 }

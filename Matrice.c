@@ -3,7 +3,7 @@
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
  *						Clément Sibut []
- *    Date de creation: (Quentin)
+ *    Date de creation: 2-02-1016 11:00:00 (Quentin)
  * Dernier mise à jour: 4-02-1016 17:35:19 (Quentin)
  */
 
@@ -114,6 +114,10 @@ int delimitationZonneExterne(Matrice *m){
 //Permet de calculer la temperature d'une cellule à un temps donne t avec les temperature à t - 1.
 int calculeTempCel(Matrice *matrice1, Matrice *matrice2, int i, int y){
 
+	int countInter = 0;
+	int countExter = 0;
+
+
 	// la matrice à t0
 	Cel ** m = matrice1->grille;
 
@@ -169,7 +173,7 @@ int calculeTempCel(Matrice *matrice1, Matrice *matrice2, int i, int y){
 	c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofNume1 + m[i][y].temp*coofNume2 + m[i-1][y-1].temp + m[i+1][y-1].temp + m[i+1][y+1].temp + m[i-1][y+1].temp )/coofDeno;
 
 
-	matrice2->grille = m;
+	//matrice2->grille = m;
 
 	return 0;
 
@@ -214,9 +218,9 @@ int display(Matrice *m){
 
 	printf("\n\n\nAffiche plaque : \n\n");
 
-	for(int i = 1; i <= indicePsedoCentre ; i++){
+	for(int i = 1; i <= indicePsedoCentre; i++){
 		printf("\n");
-		for(int y = 1; y <= indicePsedoCentre ; y++){
+		for(int y = 1; y <= indicePsedoCentre; y++){
 			printf("%f - ", (float)(m->grille[i][y]).temp); 
 		}
 	}
