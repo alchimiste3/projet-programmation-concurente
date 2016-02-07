@@ -9,7 +9,7 @@
 
 
 // Structure qui permet de representation d'une cellule, 
-// C'est a dire un "morceau" de la plaque avec une temperature uniforme sur la surface de chacun d'elle.
+// C'est a dire un "morceau" de plaque avec une temperature uniforme sur sa la surface.
 // C'est la combinaison de ces cellules qui permet la représentation de la diffussion de la chaleur sur la plaque.
 typedef struct cel{
 	//Temperature de la cellule
@@ -22,7 +22,7 @@ typedef struct cel{
 	int bordHaut;
 	int bordBas;
 
-	// Indicatif qui permet de savoir qi la cellule est dans une zonne a temperature constante.
+	// Indicatif qui permet de savoir si la cellule est dans une zonne a temperature constante.
 	int zonneInterne;
 	int zonneExterne;
 
@@ -40,7 +40,7 @@ typedef struct matrice{
 	// nombre de lignes/colonnes de la grille avec les bordure.
 	int tailleGrille;
 
-	//Double tableaux qui contient les cellules de la plaque
+	//Double tableaux qui contient les cellules de la plaque plus la bordure
 	Cel **grille;
 
 } Matrice;
