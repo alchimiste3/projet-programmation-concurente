@@ -209,7 +209,7 @@ int display(Matrice *m){
 	int indiceMaxZonneInterne = (1<<(m->taillePuissance2-1)) + (1<<(m->taillePuissance2-4));
 	int indicePsedoCentre = (indiceMaxZonneInterne + indiceMinZonneInterne)/2;
 
-	printf("\n\n\nAffiche plaque : \n\n");
+	printf("\nAffiche plaque : \n");
 
 	for(int i = 1; i <= indicePsedoCentre; i++){
 		printf("\n");
