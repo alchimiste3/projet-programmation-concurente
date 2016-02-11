@@ -37,6 +37,7 @@ enum Etapes {
 
 // Methode principale qui récupère les option de l'utilisateur et lance les différents scanarios demande.
 void main(int argc, char *argv[]){
+    //Lecture des options
 	if (argc > 1) {
 		for (int i = 1; argv[i]; i++)
 		{
@@ -45,9 +46,10 @@ void main(int argc, char *argv[]){
 			{
 				if (mot[1] == 's')
 				{
+                    // On lit la taille des données voulues
 					i++;
 					if (i <= argc && argv[i])
-					{
+                    {
 						char c;
 						while((c = *argv[i]) != '\0')
 					    {
@@ -61,15 +63,18 @@ void main(int argc, char *argv[]){
 					}
 				}
 				else if (mot[1] == 'm')
-				{
+                {
+                    //Si l'option -m est présente on affiche le temps d'execution et la trace n'apparait plus
 					affichageTemps = true;
 				}
 				else if (mot[1] == 'a')
 				{
+                    //Si l'option -a est présente on affiche les températures initiales et finales
 					affichageTemperature = true;
 				}
-				else if (mot[1] == 'i')
+                else if (mot[1] == 'i')
 				{
+                    //On lit le nombre d'itérations
 					i++;
 					if (i <= argc && argv[i])
 					{
@@ -82,6 +87,9 @@ void main(int argc, char *argv[]){
 				}
 				else if (mot[1] == 'e')
 				{
+                    /*Les étapes du programme à exécuter sont stockés dans la variable étapes
+                     * qui est une combinaison de plusieurs flags stockés
+                    Plusieurs choix peuvent donc être renseignés pour cette option*/
 					i++;
 					if (i <= argc && argv[i])
 					{
@@ -110,6 +118,9 @@ void main(int argc, char *argv[]){
 			}
 			else if (mot[1] == 't')
 			{
+                /*On lit le nombre de thread voulu (4**t)
+                On boucle afin de récupérer les différentes valeurs
+                car le programme va tester différents nombres de threads*/
 				i++;
 					if (i <= argc && argv[i])
 					{
@@ -138,12 +149,18 @@ void main(int argc, char *argv[]){
 
 // On définit des valeurs par défaut pour les tableaux
 // 2**(4+4) = 256 plaque de taille 256*256
-	indices_N[0] = 4;
-	tailleIndices = 1;
+    if (tailleIndices < 1)
+    {
+        indices_N[0] = 4;
+        tailleIndices = 1;
+    }
 	
 // 4**t donc 4**1 = 4 threads
-	threads[0] = 1;
-	tailleThreads = 1;
+    if (tailleThreads < 1)
+    {
+        threads[0] = 1;
+        tailleThreads = 1;
+    }
 
 
 // Creation deux deus matrice pour représenter la plaque sur deux temps différents.
