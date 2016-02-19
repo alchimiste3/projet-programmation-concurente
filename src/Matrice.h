@@ -2,7 +2,7 @@
  * Matrice.h 
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- *						Clément Sibut []
+ *						Clément Sibut [clement.sibut@etu.unice.fr]
  *    Date de creation: 2-02-1016 11:00:00 (Quentin)
  * Dernier mise à jour: 4-02-1016 17:35:31 (Quentin)
  */
