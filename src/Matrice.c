@@ -67,9 +67,6 @@ int delimitationZonneInterne(Matrice *m, int puissance2, float temp){
 	int indiceMax = (1<<(puissance2-1)) + (1<<(puissance2-4)) + 1;
 
 
-	// printf("%d\n", indiceMin);
-	// printf("%d\n", indiceMax);
-
 	// Initialisation de la temperature et indiquatif de zonne interne mit à 1.
 	for(int i = indiceMin; i < indiceMax; i++){
 		for(int y = indiceMin; y < indiceMax; y++){
@@ -209,7 +206,6 @@ int display(Matrice *m){
 	int indiceMaxZonneInterne = (1<<(m->taillePuissance2-1)) + (1<<(m->taillePuissance2-4));
 	int indicePsedoCentre = (indiceMaxZonneInterne + indiceMinZonneInterne)/2;
 
-	printf("\nAffiche plaque : \n");
 
 	for(int i = 1; i <= indicePsedoCentre; i++){
 		printf("\n");
@@ -217,6 +213,8 @@ int display(Matrice *m){
 			printf("%f - ", (float)(m->grille[i][y]).temp); 
 		}
 	}
+
+	printf("\n");
 
 
 	return 0;

@@ -185,6 +185,7 @@ void main(int argc, char *argv[]){
 
         //Affichage de la plaque à t = 1
         if (affichageTemperature)
+            printf("\nTempérature initiale de la plaque :\n");
             display(&matrice1);
 
         //Temps initial avant l'execution de l'algo
@@ -206,6 +207,7 @@ void main(int argc, char *argv[]){
 
         //Affichage de la plaque à t = nbIteration
         if (affichageTemperature)
+            printf("\nTempérature final de la plaque :\n");
             display(&matrice2);
     }
     //Si l'option -m est présente on affiche le temps d'execution en moyenne
