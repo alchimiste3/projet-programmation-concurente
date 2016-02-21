@@ -148,7 +148,6 @@ void main(int argc, char *argv[]){
         }
     }
 
-
     // On définit des valeurs par défaut pour les tableaux
     // 2**(4+4) = 256 plaque de taille 256*256
     if (tailleIndices < 1)
@@ -184,9 +183,10 @@ void main(int argc, char *argv[]){
         delimitationZonneExterne(&matrice2);
 
         //Affichage de la plaque à t = 1
-        if (affichageTemperature)
+        if (affichageTemperature){
             printf("\nTempérature initiale de la plaque :\n");
             display(&matrice1);
+        }
 
         //Temps initial avant l'execution de l'algo
         clock_t temps_initial, temps_final, temps_cpu;
@@ -206,9 +206,10 @@ void main(int argc, char *argv[]){
         tempsExecutions[i] = temps_cpu;
 
         //Affichage de la plaque à t = nbIteration
-        if (affichageTemperature)
+        if (affichageTemperature){
             printf("\nTempérature final de la plaque :\n");
             display(&matrice2);
+        }
     }
     //Si l'option -m est présente on affiche le temps d'execution en moyenne
     if (affichageTemps)
