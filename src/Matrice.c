@@ -2,9 +2,9 @@
  * Matrice.c 
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- *						Clément Sibut [clement.sibut@etu.unice.fr]
+ *						Clement Sibut [clement.sibut@etu.unice.fr]
  *    Date de creation: 2-02-1016 11:00:00 (Quentin)
- * Dernier mise à jour: 4-02-1016 17:35:19 (Quentin)
+ * Dernier mise a jour: 4-02-1016 17:35:19 (Quentin)
  */
 
 #include <stdio.h>
@@ -34,11 +34,11 @@ int new_Matrice(int puissance2, Matrice *matrice){
 
 
 
-	//allocation mémoire de la matrice
+	//allocation memoire de la matrice
 	m.grille = (Cel**) malloc((m.tailleGrille)*sizeof(Cel*));
 
 
-	//allocation mémoire de chaque ligne
+	//allocation memoire de chaque ligne
 	for(int i = 0; i< m.tailleGrille; i++){
 		m.grille[i] = (Cel*) malloc(m.tailleGrille*sizeof(Cel));
 	}
@@ -58,7 +58,7 @@ int new_Matrice(int puissance2, Matrice *matrice){
 	return 0;
 }
 
-// On delimite la zonne interne où les cellule ont une température constante TEMPS_CHAUD.
+// On delimite la zonne interne ou les cellule ont une temperature constante TEMPS_CHAUD.
 // On indique leur position avec la variable zonneInterne
 int delimitationZonneInterne(Matrice *m, int puissance2, float temp){
 
@@ -67,7 +67,7 @@ int delimitationZonneInterne(Matrice *m, int puissance2, float temp){
 	int indiceMax = (1<<(puissance2-1)) + (1<<(puissance2-4)) + 1;
 
 
-	// Initialisation de la temperature et indiquatif de zonne interne mit à 1.
+	// Initialisation de la temperature et indiquatif de zonne interne mit a 1.
 	for(int i = indiceMin; i < indiceMax; i++){
 		for(int y = indiceMin; y < indiceMax; y++){
 			m->grille[i][y].temp = temp;
@@ -79,7 +79,7 @@ int delimitationZonneInterne(Matrice *m, int puissance2, float temp){
 
 }
 
-// On delimite la zonne externe où les cellule ont une température constante TEMPS_FROID.
+// On delimite la zonne externe ou les cellule ont une temperature constante TEMPS_FROID.
 // On indique leur position avec la variable zonneExterne
 int delimitationZonneExterne(Matrice *m){
 
@@ -117,26 +117,26 @@ int delimitationZonneExterne(Matrice *m){
 }
 
 
-//Permet de calculer la temperature d'une cellule à un temps donne t avec les temperature à t - 1.
+//Permet de calculer la temperature d'une cellule a un temps donne t avec les temperature a t - 1.
 int calculeTempCel(Matrice *matrice1, Matrice *matrice2, int i, int y){
 
 	// la matrice en t0
 	Cel ** m = matrice1->grille;
 
-	// la cellure à modifier pour qu'elle soit en t1
+	// la cellure a modifier pour qu'elle soit en t1
 	Cel * c = &(matrice2->grille[i][y]);
 
 
 	// Si la cellule ce trouve au centre de la grille (en zonne interne).
-	// La température reste constante
+	// La temperature reste constante
 	if(m[i][y].zonneInterne){
 		c->temp = m[i][y].temp;
 		return 0;
 	}
 
 	// Si la cellule ce trouve en bourdure de la grille (en zonne externe) 
-	// On calcule ca température pour qu'elle soit égale a la cellule voisine 
-	// qui est sur la plaque afin d'obtenir un échange de chaleur nulle avec la zonne externe.
+	// On calcule ca temperature pour qu'elle soit egale a la cellule voisine 
+	// qui est sur la plaque afin d'obtenir un echange de chaleur nulle avec la zonne externe.
 	if(m[i][y].zonneExterne){
 
 		// Si la cellule est sur l'un des angle de la grille
@@ -172,7 +172,7 @@ int calculeTempCel(Matrice *matrice1, Matrice *matrice2, int i, int y){
 		}
 	}
 
-	// On calcule la temperature de la cellule pour un temps t donne avec les temperatures des 8 cellule voisine plus la sienne au temps t - 1. 
+	// On calcule la temperature de la cellule pour un temps t donne avec les temperatures des 8 cellules voisines plus la sienne au temps t - 1. 
 	// On utilise pour l'instant des cooficients constants pour la diffusion.  
 	c->temp = ((m[i-1][y].temp + m[i+1][y].temp + m[i][y-1].temp + m[i][y+1].temp)*coofNume1 + m[i][y].temp*coofNume2 + m[i-1][y-1].temp + m[i+1][y-1].temp + m[i+1][y+1].temp + m[i-1][y+1].temp )/coofDeno;
 

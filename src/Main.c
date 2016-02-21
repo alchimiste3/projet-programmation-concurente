@@ -2,9 +2,9 @@
  * Main.c
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- *						Clément Sibut [clement.sibut@etu.unice.fr]
+ *						Clement Sibut [clement.sibut@etu.unice.fr]
  *    Date de creation: 2-02-1016 11:00:00 (Quentin)
- * Dernier mise à jour: 4-02-1016 17:35:19 (Quentin)
+ * Dernier mise a jour: 4-02-1016 17:35:19 (Quentin)
  */
 
 #include <stdio.h>
@@ -37,7 +37,7 @@ enum Etapes {
 /// git commit -ma "sddcfzeefzeer"
 
 
-// Methode principale qui récupère les option de l'utilisateur et lance les différents scanarios demande.
+// Methode principale qui recupere les option de l'utilisateur et lance les differents scanarios demande.
 void main(int argc, char *argv[]){
     //Lecture des options
     if (argc > 1) {
@@ -48,7 +48,7 @@ void main(int argc, char *argv[]){
             {
                 if (mot[1] == 's')
                 {
-                    // On lit la taille des données voulues
+                    // On lit la taille des donnees voulues
                     i++;
                     if (i <= argc && argv[i])
                     {
@@ -66,32 +66,32 @@ void main(int argc, char *argv[]){
                 }
                 else if (mot[1] == 'm')
                 {
-                    //Si l'option -m est présente on affiche le temps d'execution et la trace n'apparait plus
+                    //Si l'option -m est presente on affiche le temps d'execution et la trace n'apparait plus
                     affichageTemps = true;
                 }
                 else if (mot[1] == 'a')
                 {
-                    //Si l'option -a est présente on affiche les températures initiales et finales
+                    //Si l'option -a est presente on affiche les temperatures initiales et finales
                     affichageTemperature = true;
                 }
                 else if (mot[1] == 'i')
                 {
-                    //On lit le nombre d'itérations
+                    //On lit le nombre d'iterations
                     i++;
                     if (i <= argc && argv[i])
                     {
                         int nb = atoi(argv[i]);
                         if (nb == 0)
-                            printf("Le nombre d'itérations n'est pas valide\n");
+                            printf("Le nombre d'iterations n'est pas valide\n");
                         else
                             nbIteration = nb;
                     }
                 }
                 else if (mot[1] == 'e')
                 {
-                    /*Les étapes du programme à exécuter sont stockés dans la variable étapes
-                     * qui est une combinaison de plusieurs flags stockés
-                    Plusieurs choix peuvent donc être renseignés pour cette option*/
+                    /*Les etapes du programme a executer sont stockes dans la variable etapes
+                     * qui est une combinaison de plusieurs flags stockes
+                    Plusieurs choix peuvent donc être renseignes pour cette option*/
                     i++;
                     if (i <= argc && argv[i])
                     {
@@ -121,8 +121,8 @@ void main(int argc, char *argv[]){
                 else if (mot[1] == 't')
                 {
                     /*On lit le nombre de thread voulu (4**t)
-                On boucle afin de récupérer les différentes valeurs
-                car le programme va tester différents nombres de threads*/
+                On boucle afin de recuperer les differentes valeurs
+                car le programme va tester differents nombres de threads*/
                     i++;
                     if (i <= argc && argv[i])
                     {
@@ -148,7 +148,7 @@ void main(int argc, char *argv[]){
         }
     }
 
-    // On définit des valeurs par défaut pour les tableaux
+    // On definit des valeurs par defaut pour les tableaux
     // 2**(4+4) = 256 plaque de taille 256*256
     if (tailleIndices < 1)
     {
@@ -163,7 +163,7 @@ void main(int argc, char *argv[]){
         tailleThreads = 1;
     }
 
-    // Creation deux deus matrice pour représenter la plaque sur deux temps différents.
+    // Creation deux deus matrice pour representer la plaque sur deux temps differents.
     Matrice matrice1;
     Matrice matrice2;
     new_Matrice(indices_N[0], &matrice1);
@@ -182,9 +182,9 @@ void main(int argc, char *argv[]){
         delimitationZonneInterne(&matrice2, indices_N[0] , 36);
         delimitationZonneExterne(&matrice2);
 
-        //Affichage de la plaque à t = 1
+        //Affichage de la plaque a t = 1
         if (affichageTemperature){
-            printf("\nTempérature initiale de la plaque :\n");
+            printf("\nTemperature initiale de la plaque :\n");
             display(&matrice1);
         }
 
@@ -193,7 +193,7 @@ void main(int argc, char *argv[]){
         temps_initial = clock ();
         int a = 0;
 
-        //Boucle d'intération pour simuler la diffusion de la chaleur sur plusieur itérations
+        //Boucle d'interation pour simuler la diffusion de la chaleur sur plusieur iterations
         while(a < nbIteration){
             a++;
             parcourt(&matrice1,&matrice2);
@@ -205,13 +205,13 @@ void main(int argc, char *argv[]){
         temps_cpu = temps_final - temps_initial;
         tempsExecutions[i] = temps_cpu;
 
-        //Affichage de la plaque à t = nbIteration
+        //Affichage de la plaque a t = nbIteration
         if (affichageTemperature){
-            printf("\nTempérature final de la plaque :\n");
+            printf("\nTemperature final de la plaque :\n");
             display(&matrice2);
         }
     }
-    //Si l'option -m est présente on affiche le temps d'execution en moyenne
+    //Si l'option -m est presente on affiche le temps d'execution en moyenne
     if (affichageTemps)
     {
         int moyenne = calculerMoyenne(tempsExecutions, 10);

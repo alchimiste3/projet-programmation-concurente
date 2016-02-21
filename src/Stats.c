@@ -2,7 +2,7 @@
  * Stats.c
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- *						Clément Sibut [clement.sibut@etu.unice.fr]
+ *						Clement Sibut [clement.sibut@etu.unice.fr]
  */
 
 #include <stdio.h>

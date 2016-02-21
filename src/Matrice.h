@@ -2,21 +2,21 @@
  * Matrice.h 
  *
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
- *						Clément Sibut [clement.sibut@etu.unice.fr]
+ *						Clement Sibut [clement.sibut@etu.unice.fr]
  *    Date de creation: 2-02-1016 11:00:00 (Quentin)
- * Dernier mise à jour: 4-02-1016 17:35:31 (Quentin)
+ * Dernier mise a jour: 4-02-1016 17:35:31 (Quentin)
  */
 
 
 // Structure qui permet de representation d'une cellule, 
 // C'est a dire un "morceau" de plaque avec une temperature uniforme sur sa la surface.
-// C'est la combinaison de ces cellules qui permet la représentation de la diffussion de la chaleur sur la plaque.
+// C'est la combinaison de ces cellules qui permet la representation de la diffussion de la chaleur sur la plaque.
 typedef struct cel{
 	//Temperature de la cellule
 	float temp;
 
 	// Indicatif qui permet de savoir, si la cellule est dans la zonne externe, qui est sa cellule voisine. 
-	//Par exemple, si bordDroite = 1 et que touts les autres sont à 0 alors, la cellule voisine sur la plaque est à gauche de celle-ci.
+	//Par exemple, si bordDroite = 1 et que touts les autres sont a 0 alors, la cellule voisine sur la plaque est a gauche de celle-ci.
 	int bordDroite;
 	int bordGauche;
 	int bordHaut;
