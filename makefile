@@ -6,7 +6,7 @@
 #Dernier mise à jour: 21-02-1016 19:48 (Quentin)
 
 
-simulation : bin/Main.o bin/Matrice.o bin/Stats.o
+simulation : bin bin/Main.o bin/Matrice.o bin/Stats.o 
 	gcc -std=c99 -o simulation bin/Main.o bin/Matrice.o bin/Stats.o 
 
 bin/Main.o : src/Main.c
@@ -18,5 +18,9 @@ bin/Matrice.o : src/Matrice.h src/Matrice.c
 bin/Stats.o : src/Stats.h src/Stats.c
 	gcc -std=c99 -o bin/Stats.o -c src/Stats.c 
 
+bin :
+	mkdir bin
+
 clean : 
 	rm -f simulation bin/Matrice.o bin/Stats.o bin/Main.o 
+	rm -r bin
