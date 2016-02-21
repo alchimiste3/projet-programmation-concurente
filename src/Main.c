@@ -4,7 +4,7 @@
  *              Auteur: Quentin Laborde [qlaborde@polytech.unice.fr]
  *						Clement Sibut [clement.sibut@etu.unice.fr]
  *    Date de creation: 2-02-1016 11:00:00 (Quentin)
- * Dernier mise a jour: 4-02-1016 17:35:19 (Quentin)
+ * Dernier mise a jour: 19-02-1016 17:35:19 (Clement)
  */
 
 #include <stdio.h>
